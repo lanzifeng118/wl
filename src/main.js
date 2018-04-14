@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import Routers from './router';
 import Util from './libs/util';
 import App from './app.vue';
+import store from './store/index'
 import 'iview/dist/styles/iview.css';
 
 Vue.use(VueRouter);
@@ -29,6 +30,7 @@ router.afterEach((to, from, next) => {
 
 new Vue({
     el: '#app',
-    router: router,
+    router,
+    store,
     render: h => h(App)
 });
