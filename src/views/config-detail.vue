@@ -1,10 +1,18 @@
 <template>
   <div class="config-detail">
-    <Tabs :animated="false" v-model="activeTab" @on-click="tabChange">
+    <div class="config-detail-back">
+      <span>{{name}}</span>
+      <Button type="error" size="small" shape="circle" icon="close-round" class="color-error" @click="back"></Button>
+    </div>
+    <Tabs v-if="items.length" :animated="false" type="card" v-model="activeTab" @on-click="tabChange">
         <TabPane v-for="(item, index) in items" :label="item.cfg_statement" :name="index.toString()">
-          <Table height="600" :columns="columns" :data="tableData" :border="true" size="small" :loading= "loading"></Table>
+          <Table height="600" :columns="columns" :data="tableData" :border="true" size="small"></Table>
         </TabPane>
     </Tabs>
+    <Spin fix v-show="loading">
+      <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
+      <div>加载中</div>
+    </Spin>
   </div>
 </template>
 <script>
@@ -12,11 +20,17 @@ import action from 'components/config/action'
 export default {
   data() {
     return {
+      loading: true,
       activeTab: '0',
       items: [],
       columns: [],
       tableData: [],
-      loading: false
+      name: ''
+    }
+  },
+  watch: {
+    '$route'(to, from) {
+      this.getData()
     }
   },
   created () {
@@ -24,6 +38,11 @@ export default {
   },
   methods: {
     getData() {
+      this.name = decodeURI(this.$route.query.name)
+
+      this.loading = true
+
+      this.loading = false
       let data = {
         "code": 57808,
         "data": [
@@ -130,6 +149,9 @@ export default {
           }
         }
       )
+    },
+    back() {
+      this.$router.push('/config')
     }
   },
   components: {
@@ -139,6 +161,22 @@ export default {
 </script>
 <style>
 .config-detail {
+  position: relative;
   padding: 10px 25px 25px;
 }
+.config-detail-back {
+  position: absolute;
+  right: 25px;
+  top: 9px;
+  z-index: 2;
+}
+.config-detail-back span{
+  float: left;
+  margin-right: 5px;
+  line-height: 24px;
+  font-weight: bold;
+  color: #999;
+}
+
+
 </style>

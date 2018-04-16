@@ -7,3 +7,9 @@
 .color-error {
   color: #ed3f14;
 }
+.color-primary {
+  color: #2d8cf0;
+}
+.spin-icon-load{
+  animation: ani-demo-spin 1s linear infinite;
+}

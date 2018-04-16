@@ -7,6 +7,9 @@ import App from './app.vue';
 import store from './store/index'
 import 'iview/dist/styles/iview.css';
 
+// import echarts from 'echarts'
+// Vue.prototype.$echarts = echarts 
+
 Vue.use(VueRouter);
 Vue.use(iView);
 

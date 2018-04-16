@@ -1,21 +1,27 @@
 <template>
-  <div v-if="data">
+  <div v-if="this.params">
     <Button size="small" type="success" :disabled="isStart" @click="start">Start</Button>
-    <Button size="small" type="warning" :disabled="!isStart">Stop</Button>
-    <Button size="small" type="primary" :disabled="!isStart">Restart</Button>
+    <Button size="small" type="warning" :disabled="!isStart" @click="stop">Stop</Button>
+    <Button size="small" type="primary" :disabled="!isStart" @click="restart">Restart</Button>
   </div>
 </template>
 <script>
 export default {
-  props: ['data'],
+  props: ['params'],
   computed: {
     isStart() {
-      return this.data.status === 1
+      return this.params.row.status === 1
     }
   },
   methods: {
     start() {
-      console.log('1')
+      this.$emit('start')
+    },
+    stop() {
+      this.$emit('stop')
+    },
+    restart() {
+      this.$emit('restart')
     }
   }
 }

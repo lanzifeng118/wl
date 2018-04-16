@@ -43,6 +43,12 @@ export default {
             "name": "测试内容l3e7",
             "time": "测试内容p2qw",
             "version": "测试内容44z4"
+          },
+          {
+            "alias": "应用1",
+            "name": "应用1",
+            "time": "2019",
+            "version": "5.3.1"
           }
         ],
         "msg": "测试内容2326"
@@ -63,8 +69,14 @@ export default {
         }
       }, '修改配置')
     },
+    // TODO: name or alias
     toDetail(data) {
-      this.$router.push('/config/detail')
+      this.$router.push({
+        path: '/config/detail',
+        query: {
+          name: encodeURI(data.alias)
+        }
+      })
     }
   },
   components: {

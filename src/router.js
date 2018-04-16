@@ -14,7 +14,8 @@ const routers = [
           { path: '/', component: (slv) => require(['./views/config-list.vue'], slv) },
           { path: 'detail', component: (slv) => require(['./views/config-detail.vue'], slv) }
         ]
-      }
+      },
+      { path: 'statistics', component: (slv) => require(['./views/statistics.vue'], slv)}
     ]
   },
   {
