@@ -34,7 +34,7 @@ export default {
 
     myChart.setOption({
       title: {
-        text: 'ECharts 入门示例'
+        text: '示例'
       },
       series: [
         {

@@ -1,9 +1,15 @@
 <template>
   <div class="layout">
     <Layout>
-      <Header style="height: 50px; background: #292f3b;">
-        <div class="layout-logo"></div>
-    </Header>
+      <Header class="header" style="height: 50px; line-height: 50px; color: #ccc; background: #292f3b; font-size: 20px;">
+        <div class="header-name">DOAPI</div>
+        <div class="header-info">
+          <Badge count="5" style="margin-right: 10px;">
+            <Icon type="ios-bell-outline" size="26"></Icon>
+          </Badge>
+          <Avatar shape="circle" icon="person" size="small" />
+        </div>
+      </Header>
     <Layout>
         <Sider hide-trigger style="background: #fff">
           <Menu theme="dark" :active-name="activeName" width="100%" @on-select="menuSelect" :style="`height: ${contentHeight}px`">
@@ -84,18 +90,31 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 .layout {
   background: #f5f7f9;
   position: relative;
   overflow: hidden;
 }
-.layout-logo {
+.header-name {
+  float: left;
+}
+.header-info {
+  float: right;
 }
 .layout-nav {
   width: 420px;
   margin: 0 auto;
   margin-right: 20px;
+}
+.header .ivu-badge-count {
+  width: 16px;
+  height: 16px;
+  top: -6px;
+  line-height: 15px;
+  min-width: 16px;
+  padding: 0;
+  box-shadow: none;
 }
 </style>
 

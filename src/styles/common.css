@@ -13,3 +13,6 @@
 .spin-icon-load{
   animation: ani-demo-spin 1s linear infinite;
 }
+
+.f-clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+.f-clearfix{*+height:1%;}
