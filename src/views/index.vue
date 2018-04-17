@@ -1,12 +1,12 @@
 <template>
   <div class="layout">
     <Layout>
-      <Header style="height: 50px;">
+      <Header style="height: 50px; background: #292f3b;">
         <div class="layout-logo"></div>
     </Header>
     <Layout>
         <Sider hide-trigger style="background: #fff">
-          <Menu theme="light" :active-name="activeName" width="100%" @on-select="menuSelect" :style="`height: ${contentHeight}px`">
+          <Menu theme="dark" :active-name="activeName" width="100%" @on-select="menuSelect" :style="`height: ${contentHeight}px`">
               <MenuItem v-for="item in menu" :name="item.name">
                 <Icon :type="item.icon"></Icon>
                 {{item.title}}
