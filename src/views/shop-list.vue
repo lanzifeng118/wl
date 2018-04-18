@@ -4,11 +4,11 @@
       <Input v-model="search" placeholder="搜索..." clearable style="width: 200px"></Input>
       <Button type="text" shape="circle" icon="ios-search" style="position: absolute; right: 0; top: 0; z-index: 20;"></Button>
     </div>
-    <Tabs type="card" :animated="false">
-      <TabPane label="全部应用">
+    <Tabs :animated="false">
+      <TabPane label="全部应用" icon="ios-keypad">
         <card :data="data"></card>
       </TabPane>
-      <TabPane label="已安装">
+      <TabPane label="已安装" icon="android-download">
         <card :data="installedData"></card>
       </TabPane>
     </Tabs>
@@ -86,13 +86,20 @@ export default {
 <style>
 .shop-list {
   position: relative;
-  padding: 20px 25px 25px;
+  padding: 0 25px 25px;
 }
 .shop-list-search {
   z-index: 3;
   position: absolute;
   right: 25px;
-  top: 10px;
+  top: 8px;
+}
+.shop-list .ivu-tabs-nav .ivu-tabs-tab {
+  padding: 14px 20px 15px;
+  /* padding-bottom: 15px; */
+}
+.shop-list .ivu-tabs-nav .ivu-tabs-tab .ivu-icon {
+  margin-right: 6px;
 }
 </style>
 

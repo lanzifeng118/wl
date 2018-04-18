@@ -5,7 +5,7 @@ const routers = [
       title: ''
     },
     component: (slv) => require(['./views/index.vue'], slv),
-    redirect: 'home',
+    redirect: { name: 'home' },
     children: [
       { path: 'home', component: (slv) => require(['./views/home.vue'], slv), name: 'home' },
       {
@@ -25,7 +25,14 @@ const routers = [
       { path: 'statistics', component: (slv) => require(['./views/statistics.vue'], slv) },
       { path: 'interface', component: (slv) => require(['./views/interface.vue'], slv)},
       { path: 'task', component: (slv) => require(['./views/interface.vue'], slv) },
-      { path: 'me', component: (slv) => require(['./views/interface.vue'], slv) }
+      { 
+        path: 'me', component: (slv) => require(['./views/me.vue'], slv), redirect: {name: 'warn'},
+        children: [
+          { path: 'warn', component: (slv) => require(['./views/me-warn.vue'], slv), name: 'warn' },
+          { path: 'message', component: (slv) => require(['./views/me-message.vue'], slv)},
+          { path: 'password', component: (slv) => require(['./views/me-password.vue'], slv)}
+        ]
+      }
       
     ]
   },

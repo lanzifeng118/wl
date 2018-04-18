@@ -47,7 +47,7 @@ export default {
         name: 'interface'
       }, {
         title: '定时任务',
-        icon: 'ios-clock',
+        icon: 'ios-alarm',
         name: 'task'
       }, {
         title: '应用商店',

@@ -2,6 +2,7 @@
   <div class="shop-cards f-clearfix">
     <div class="shop-card" v-for="item in data" @click="toDetail(item.app_id)">
       <Card>
+        <p slot="title">{{item.app_name}}</p>
         <div class="shop-cards-title f-clearfix">
           <h4>{{item.app_name}}</h4>
           <p>{{item.version}}</p>
@@ -40,7 +41,7 @@
 .shop-card {
   float: left;
   cursor: pointer;
-  width: 300px;
+  width: 270px;
   margin-bottom: 10px;
   margin-right: 10px;
 }
