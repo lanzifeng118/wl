@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Table height="600" :columns="columns" :data="data" :border="true" size="default" :loading="loading"></Table>
+    <Table height="600" :columns="columns" :data="data" :border="true" size="small" :loading="loading"></Table>
   </div>
 </template>
 <script>
@@ -180,6 +180,6 @@ export default {
 </script>
 <style>
 .home {
-  padding: 25px;
+  margin: 25px;
 }
 </style>

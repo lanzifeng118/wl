@@ -220,7 +220,7 @@ export default {
 <style>
 .config-detail {
   position: relative;
-  padding: 20px 25px 25px;
+  margin: 20px 25px 25px;
 }
 .config-detail-back {
   position: absolute;

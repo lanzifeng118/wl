@@ -85,6 +85,6 @@ export default {
 </script>
 <style>
 .config-list {
-  padding: 25px;
+  margin: 25px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-  <div v-if="this.params">
+  <div class="home-action" v-if="this.params">
     <Button size="small" type="success" :disabled="isStart" @click="start" icon="play">启动</Button>
-    <Button size="small" type="warning" :disabled="!isStart" @click="stop" icon="stop">停止</Button>
+    <Button size="small" type="warning" :disabled="!isStart" @click="stop" icon="pause">停止</Button>
     <Button size="small" type="primary" :disabled="!isStart" @click="restart" icon="android-refresh">重启</Button>
   </div>
 </template>
@@ -27,6 +27,5 @@ export default {
 }
 </script>
 <style>
-
 </style>
 
