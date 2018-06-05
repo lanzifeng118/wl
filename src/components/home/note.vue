@@ -1,7 +1,7 @@
 <template>
   <Tooltip placement="top" :disabled="status === 'success'">
     <div :class="`color-${status}`">
-      <Icon v-if="status !== 'success'" type="android-alert" style="margin-right: 5px;"></Icon>{{text}}
+      <Icon v-if="status === 'warning' || status === 'error'" type="android-alert" style="margin-right: 5px;"></Icon>{{text}}
     </div>
     <div slot="content">
       提示
@@ -30,32 +30,59 @@ export default {
     }
   },
   computed: {
-    status() {
-      let zone = this[this.type]
-      let data = this.data || 0
-      let status
-
-      if (this.type === 'memory') {
-        data = data / 1024 / 1024
-      } else if (this.type === 'delay'){
-        data = parseInt(data)   
+    isDisable() {
+      return this.data.status === 3 || this.data.status === 2
+    },
+    target() {
+      let target
+      if (!this.isDisable) {
+        switch (this.type) {
+          case 'memory':
+            target = this.data.monit.memory
+            break;
+          case 'cpu':
+            target = this.data.monit.cpu
+            break;
+          case 'delay':
+            target = this.data.loop_delay
+            break;
+        }
       }
-
-      if (data >= zone.error) {
-        status = 'error' 
-      } else if (data >= zone.warn) {
-        status = 'warning'
+      return target
+    },
+    status() {
+      let status
+      if (this.isDisable) {
+        status = 'disabled'
       } else {
-        status = 'success'
+        let target = this.target
+        if (this.type === 'memory') {
+          target = target / 1024 / 1024
+        } else if (this.type === 'delay'){
+          target = parseInt(target)   
+        }
+  
+        let zone = this[this.type]
+        if (target >= zone.error) {
+          status = 'error' 
+        } else if (target >= zone.warn) {
+          status = 'warning'
+        } else {
+          status = 'success'
+        }
       }
       return status
     },
     text() {
-      let text = this.data
-      if (this.type === 'cpu') {
-        text = `${text}%`
-      } else if (this.type === 'memory') {
-        text = util.bytesToSize(text)
+      let text = this.target
+      if (this.isDisable) {
+        text = '-'
+      } else {
+        if (this.type === 'cpu') {
+          text = `${text}%`
+        } else if (this.type === 'memory') {
+          text = util.bytesToSize(text)
+        }
       }
       return text
     }

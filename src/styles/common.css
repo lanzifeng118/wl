@@ -10,9 +10,21 @@
 .color-primary {
   color: #2d8cf0;
 }
+.color-disabled {
+  color: #bbbec4;
+}
 .spin-icon-load{
   animation: ani-demo-spin 1s linear infinite;
 }
 
-.f-clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
-.f-clearfix{*+height:1%;}
+.f-clearfix:after {
+  content: '.';
+  height: 0;
+  display: block;
+  clear: both;
+  visibility: hidden;
+}
+
+.f-clearfix {
+  *zoom:1;
+}

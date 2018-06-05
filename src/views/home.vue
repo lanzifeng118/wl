@@ -1,14 +1,14 @@
 <template>
   <div class="home">
-    <Table height="600" :columns="columns" :data="data" :border="true" size="small" :loading="loading"></Table>
+    <Table height="600" :columns="columns" :data="data" :border="true" size="default" :loading="loading"></Table>
   </div>
 </template>
 <script>
 import action from 'components/home/action'
-import cpu from 'components/home/cpu'
-import memory from 'components/home/memory'
-import delay from 'components/home/delay'
+import note from 'components/home/note'
+import restart from 'components/home/restartTime'
 import status from 'components/home/status'
+import api from '../libs/api'
 
 export default {
   data() {
@@ -43,12 +43,12 @@ export default {
         {
           title: '重启次数',
           align: 'center',
-          key: 'restart_time'
+          render: this.renderRestartTime
         },
         {
           title: '操作',
           align: 'center',
-          width: 200,
+          width: 260,
           render: this.renderAction
         }
       ],
@@ -60,52 +60,24 @@ export default {
     this.getData()
   },
   methods: {
-    getData() {
-      this.loading = true
-      let data = {
-        code: 63008,
-        data: [
-          {
-            ins_id: 34461,
-            loop_delay: '302ms',
-            monit: {
-              cpu: 60,
-              memory: 26040
-            },
-            name: '测试内容n7cz',
-            restart_time: 2538400,
-            status: 1, // 1 online 2 stopped
-            up_time: 21347
-          },
-          {
-            ins_id: 34461,
-            loop_delay: '30ms',
-            monit: {
-              cpu: 75,
-              memory: 26040541547
-            },
-            name: '测试内容n7cz',
-            restart_time: 25384,
-            status: 2, // 1 online 2 stopped
-            up_time: 21347
-          },
-          {
-            ins_id: 34461,
-            loop_delay: '800ms',
-            monit: {
-              cpu: 81,
-              memory: 260400541
-            },
-            name: '测试内容n7cz',
-            restart_time: 25384,
-            status: 2, // 1 online 2 stopped
-            up_time: 21347
-          }
-        ],
-        msg: '测试内容ns04'
+    getData(callback) {
+      // 1：online；2：stopped；3：unload
+      if (!callback) {
+        this.loading = true
       }
-      this.loading = false
-      this.data = data.data
+      this.axios(api.dashboard.list()).then(res => {
+        let data = res.data
+        console.log(data)
+        if (data.code === 200) {
+          this.loading = false
+          this.data = data.data
+          callback && callback()
+        }
+      }).catch(err => {
+        console.log(err)
+        callback && callback()
+        this.$Message.error(`获取列表失败`)
+      })
     },
     renderStatus(h, params) {
       return h(status, {
@@ -115,75 +87,93 @@ export default {
       })
     },
     renderCpu(h, params) {
-      return h(cpu, {
+      // console.log(params.row.monit.cpu)
+      return h(note, {
         props: {
-          data: params.row.monit.cpu,
+          data: params.row,
           type: 'cpu'
         }
       })
     },
     renderMemory(h, params) {
-      return h(memory, {
+      return h(note, {
         props: {
-          data: params.row.monit.memory,
+          data: params.row,
           type: 'memory'
         }
       })
     },
     renderDelay(h, params) {
-      return h(delay, {
+      return h(note, {
         props: {
-          data: params.row.loop_delay,
+          data: params.row,
           type: 'delay'
         }
       })
     },
+    renderRestartTime(h, params) {
+      return h(restart, {
+        props: {
+          data: params.row
+        }
+      })
+    },
     renderAction(h, params) {
-      console.log(params)
+      // console.log(params)
       return h(action, {
         props: {
           params: params
         },
         on: {
-          start: () => { this.actionClick('start', params) },
-          stop: () => { this.actionClick('stop', params) },
-          restart: () => { this.actionClick('restart', params) }
+          start: () => {
+            this.actionClick('start', params)
+          },
+          stop: () => {
+            this.actionClick('stop', params)
+          },
+          restart: () => {
+            this.actionClick('restart', params)
+          }
         }
       })
     },
     actionClick(type, params) {
       console.log(type)
-      let text
+      let text, name = params.row.name
       switch (type) {
         case 'start':
           text = '开启'
-          break;
+          break
         case 'stop':
           text = '停止'
-          break;
+          break
         case 'restart':
           text = '重启'
-          break;
+          break
       }
       this.$Modal.confirm({
         title: type.toUpperCase(),
-        content: `<p>确定${text}应用【${params.row.name}】</p>`,
+        content: `<p>确定${text}应用【${name}】</p>`,
         loading: true,
         onOk: () => {
-          setTimeout(() => {
-            this.$Modal.remove()
-            this.data[params.index].status = type === 'stop' ? 2 : 1 // 1 online 2 stopped
-            this.$Message.info( `${text}成功`)
-          }, 500)
+          this.axios(api.dashboard[type](name)).then(res => {
+            let data = res.data
+            console.log(data)
+            if (data.code === 200) {
+              this.getData(() => {
+                this.$Message.success(`${text}成功`)
+                this.$Modal.remove()
+              })
+            }
+          })
         }
       })
     }
   },
   components: {
     action,
-    cpu,
-    memory,
-    delay,
+    note,
+    restart,
     status
   }
 }

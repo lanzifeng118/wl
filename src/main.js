@@ -5,13 +5,17 @@ import Routers from './router';
 import Util from './libs/util';
 import App from './app.vue';
 import store from './store/index'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import 'iview/dist/styles/iview.css';
+
 
 // import echarts from 'echarts'
 // Vue.prototype.$echarts = echarts 
 
 Vue.use(VueRouter);
 Vue.use(iView);
+Vue.use(VueAxios, axios);
 
 // 路由配置
 const RouterConfig = {

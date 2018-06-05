@@ -31,5 +31,16 @@ module.exports = merge(webpackBaseConfig, {
             template: './src/template/index.ejs',
             inject: false
         })
-    ]
+    ],
+    devServer: {
+        port: '8090',
+        proxy: {
+            '/doapi-v2': {
+                target: 'http://180.167.0.42:8067/doapi-v2/',
+                pathRewrite: {
+                    '^/doapi-v2': ''
+                }
+            }
+        }
+    }
 });
