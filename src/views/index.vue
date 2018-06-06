@@ -52,7 +52,7 @@ export default {
       }, {
         title: '应用商店',
         icon: 'ios-cart',
-        name: 'shop'
+        name: 'appstore'
       }, {
         title: '个人中心',
         icon: 'person',

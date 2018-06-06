@@ -16,10 +16,10 @@ const routers = [
         ]
       },
       {
-        path: 'shop', component: (slv) => require(['./views/shop.vue'], slv),
+        path: 'appstore', component: (slv) => require(['./views/appstore.vue'], slv),
         children: [
-          { path: '/', component: (slv) => require(['./views/shop-list.vue'], slv) },
-          { path: 'detail', component: (slv) => require(['./views/shop-detail.vue'], slv) }
+          { path: '/', component: (slv) => require(['./views/appstore-list.vue'], slv) },
+          { path: 'detail', component: (slv) => require(['./views/appstore-detail.vue'], slv) }
         ]
       },
       { path: 'statistics', component: (slv) => require(['./views/statistics.vue'], slv) },

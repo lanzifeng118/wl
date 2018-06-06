@@ -1,35 +1,42 @@
 const dashboardUrl = '/doapi-v2/dashboard'
+const appUrl = '/doapi-v2/appstore'
 
-let queryFun = (url, pageData, method = 'query') => {
-  let data = {}
+let queryFun = (url, method = 'query', pageData) => {
+  let data = { method }
   if (pageData) {
-    for (var key in pageData) {
-      data[key] = pageData[key]
-    }
+    data.data = pageData
   }
   return {
     method: 'post',
     url: url,
-    data: {
-      method: method,
-      data: data
-    }
+    data
   }
 }
 
 let api = {
   dashboard: {
     list() {
-      return queryFun(dashboardUrl, null ,'status.list')
+      return queryFun(dashboardUrl, 'status.list', null)
     },
     start(name) {
-      return queryFun(dashboardUrl, { app_name: name }, 'start')
+      return queryFun(dashboardUrl, 'start', { app_name: name })
     },
     restart(name) {
-      return queryFun(dashboardUrl, { app_name: name }, 'restart')
+      return queryFun(dashboardUrl, 'restart', { app_name: name }, 'restart')
     },
     stop(name) {
-      return queryFun(dashboardUrl, { app_name: name }, 'stop')
+      return queryFun(dashboardUrl, 'stop', { app_name: name })
+    }
+  },
+  appstore: {
+    list() {
+      return queryFun(appUrl, 'app.list')
+    },
+    install(name, auth_code) {
+      return queryFun(appUrl, 'install', { name, auth_code })
+    },
+    uninstall(name) {
+      return queryFun(appUrl, 'uninstall', { app_name: name })
     }
   }
 }

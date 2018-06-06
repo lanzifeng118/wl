@@ -8,7 +8,7 @@ import action from 'components/home/action'
 import note from 'components/home/note'
 import restart from 'components/home/restartTime'
 import status from 'components/home/status'
-import api from '../libs/api'
+import api from 'libs/api'
 
 export default {
   data() {
@@ -70,6 +70,7 @@ export default {
         console.log(data)
         if (data.code === 200) {
           this.loading = false
+          // data.data[0].loop_delay = '600ms'
           this.data = data.data
           callback && callback()
         }

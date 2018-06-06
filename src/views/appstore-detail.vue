@@ -1,11 +1,11 @@
 <template>
-  <div class="shop-detail">
-    <div class="shop-detail-top f-clearfix">
-      <div class="shop-detail-logo"><img :src="data.logo"></div>
-      <div class="shop-detail-info">
-        <h3>{{data.app_name}}</h3>
+  <div class="appstore-detail">
+    <div class="appstore-detail-top f-clearfix">
+      <div class="appstore-detail-logo"><img :src="data.logo"></div>
+      <div class="appstore-detail-info">
+        <h3>{{data.name}}</h3>
         <p>简介: {{data.brief}}</p>
-        <div class="shop-detail-buttoms">
+        <div class="appstore-detail-buttoms">
           <Button v-if="data.install_status === '0'" type="success" size="small" @click.stop="action">安装</Button>
           <Button v-if="data.install_status === '2'" type="warning" size="small" @click.stop="action">更新</Button>
           <Button v-if="data.install_status === '1' || data.install_status === '2'" size="small" @click.stop="action">卸载</Button>
@@ -104,10 +104,10 @@ export default {
 </script>
 
 <style>
-.shop-detail {
+.appstore-detail {
   padding: 25px;
 }
-.shop-detail-logo {
+.appstore-detail-logo {
   float: left;
   padding: 5px;
   width: 100px;
@@ -116,26 +116,26 @@ export default {
   background: #f1f1f1;
   margin-right: 10px;
 }
-.shop-detail-logo img {
+.appstore-detail-logo img {
   vertical-align: middle;
   width: 100%;
 }
-.shop-detail-info {
+.appstore-detail-info {
   margin-bottom: 15px;
   float: left;
 }
-.shop-detail-info h3 {
+.appstore-detail-info h3 {
   margin-bottom: 8px;
 }
-.shop-detail-info p {
+.appstore-detail-info p {
   margin-bottom: 8px;
 }
 
-.shop-detail .ivu-table-wrapper {
+.appstore-detail .ivu-table-wrapper {
   /* border: none; */
 }
 
-.shop-detail .ivu-table th {
+.appstore-detail .ivu-table th {
   /* border-bottom: none; */
 }
 </style>

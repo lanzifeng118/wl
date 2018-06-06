@@ -1,5 +1,5 @@
 <template>
-  <div class="shop">
+  <div class="appstore">
     <router-view></router-view>
   </div>
 </template>
@@ -13,6 +13,6 @@ export default {
 }
 </script>
 <style>
-.shop {
+.appstore {
 }
 </style>

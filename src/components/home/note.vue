@@ -1,10 +1,10 @@
 <template>
-  <Tooltip placement="top" :disabled="status === 'success'">
+  <Tooltip class="home-note" placement="top" :disabled="status === 'success'">
     <div :class="`color-${status}`">
       <Icon v-if="status === 'warning' || status === 'error'" type="android-alert" style="margin-right: 5px;"></Icon>{{text}}
     </div>
     <div slot="content">
-      提示
+      {{note}}
     </div>
   </Tooltip>
 </template>
@@ -85,9 +85,37 @@ export default {
         }
       }
       return text
+    },
+    note() {
+      let type = ''
+      switch (this.type) {
+        case 'memory':
+          type = '内存占用大小'
+          break;
+        case 'cpu':
+          type = 'CPU利用率'
+          break;
+        case 'delay':
+          type = '延时时间'
+          break;
+      }
+
+      let note = ''
+      switch (this.status) {
+        case 'warning':
+          note = `${type}稍微偏高,请持续关注系统运行状态`
+          break;
+        case 'error':
+          note = `${type}过高,请持续查看系统运行负荷`
+          break
+      }
+      return note
     }
   }
 }
 </script>
 <style>
+.home-note .ivu-tooltip-inner {
+  max-width: none;
+}
 </style>
