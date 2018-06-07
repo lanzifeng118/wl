@@ -40,7 +40,7 @@ export default {
       }, {
         title: '应用配置',
         icon: 'gear-a',
-        name: 'config'
+        name: 'setting'
       }, {
         title: '接口管理',
         icon: 'cloud',

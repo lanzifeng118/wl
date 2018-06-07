@@ -166,6 +166,9 @@ export default {
                 this.$Modal.remove()
               })
             }
+          }).catch(err => {
+            this.$Message.error(`${text}失败`)
+            this.$Modal.remove()
           })
         }
       })

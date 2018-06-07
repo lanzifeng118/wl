@@ -31,6 +31,7 @@ export default {
   methods: {
     getData() {
       // 1安装中 2已安装 3未安装 4更新中 5需更新 6卸载中
+      this.installedData = []
       this.axios(api.appstore.list())
         .then(res => {
           let data = res.data
@@ -49,7 +50,7 @@ export default {
           console.log(err)
           this.$Message.error(`获取列表失败`)
         })
-    },
+    }
 
   },
   components: {

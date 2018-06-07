@@ -3,12 +3,10 @@
     <div class="appstore-detail-top f-clearfix">
       <div class="appstore-detail-logo"><img :src="data.logo"></div>
       <div class="appstore-detail-info">
-        <h3>{{data.name}}</h3>
+        <h3>{{data.alias}}</h3>
         <p>简介: {{data.brief}}</p>
         <div class="appstore-detail-buttoms">
-          <Button v-if="data.install_status === '0'" type="success" size="small" @click.stop="action">安装</Button>
-          <Button v-if="data.install_status === '2'" type="warning" size="small" @click.stop="action">更新</Button>
-          <Button v-if="data.install_status === '1' || data.install_status === '2'" size="small" @click.stop="action">卸载</Button>
+          <buttons :item="data" @change="change"></buttons>
         </div>
       </div>
     </div>
@@ -17,88 +15,70 @@
         {{data.content}}
       </TabPane>
       <TabPane label="客户案例">
-        <Table :columns="cus.columns" :data="cus.data" :width="650" size="small"></Table>
+        <Table :columns="cus.columns" :data="data.install_info" :width="650" size="small"></Table>
       </TabPane>
       <TabPane label="更新日志">
-        <Table :columns="upgrade.columns" :data="upgrade.data" :width="650" size="small"></Table>
+        <Table :columns="upgrade.columns" :data="data.upgrade_info" :width="650" size="small"></Table>
       </TabPane>
     </Tabs>
   </div>
 </template>
 
 <script>
+import buttons from 'components/appstore/buttons.vue'
+import api from 'libs/api'
 export default {
   data() {
     return {
       data: {},
       cus: {
         columns: [
-          { title: '客户名称', key: 'customer', align: 'center' },
+          { title: '客户名称', key: 'name', align: 'center' },
           { title: '行业', key: 'industry', align: 'center' },
-          { title: '下载时间', key: ' download_time', align: 'center' }
+          { title: '下载时间', key: 'time', align: 'center' }
         ],
         data: []
       },
       upgrade: {
         columns: [
-          { title: '版本', key: 'upg_version', align: 'center' },
-          { title: '更新内容', key: 'upg_content', align: 'center' },
+          { title: '版本', key: 'version', align: 'center' },
+          { title: '更新内容', key: 'content', align: 'center' },
           { title: '更新时间', key: 'time', align: 'center' }
         ],
         data: []
       }
     }
   },
+  computed: {
+    name() {
+      return this.$route.query.name
+    }
+  },
   created() {
     this.getData()
   },
+  watch: {
+    name() {
+      this.getData()
+    }
+  },
   methods: {
     getData() {
-      let data = {
-        "code": 83817,
-        "data": {
-          "alias_name": "测试内容9c4r",
-          "app_name": "支付宝当面支付",
-          "brief": "全球领先的独立第三方支付平台",
-          "content": "全球领先的独立第三方支付平台,致力于为广大用户提供安全快速的电子支付/网上支付/安全支付/手机支付体验",
-          "install_info": [
-            {
-              "customer": "真功夫",
-              "industry": "餐饮",
-              " download_time": "2018-03-19"
-            },
-            {
-              "customer": "新东方",
-              "industry": "教育",
-              " download_time": "2018-03-19"
-            }
-          ],
-          "install_status": "0",
-          "download_count": 86532,
-          "logo": "https://t.alipayobjects.com/images/T1HHFgXXVeXXXXXXXX.png",
-          "upgrade_info": [
-            {
-              "time": "2018.01.02",
-              "upg_content": "添加X功能",
-              "upg_version": "v1.2.1"
-            },
-            {
-              "time": "2018.01.18",
-              "upg_content": "修复xbug",
-              "upg_version": "v1.2.2"
-            }
-          ],
-          "version": "测试内容5v97"
-        },
-        "msg": "测试内容oy4v"
-      }
-      this.data = data.data
-      this.cus.data = data.data.install_info
-      this.upgrade.data = data.data.upgrade_info
+      this.axios(api.appstore.detail(this.name)).then(res => {
+        let data = res.data
+        console.log(data)
+        if (data.code === 200) {
+          data.data.logo = 'https://t.alipayobjects.com/images/T1HHFgXXVeXXXXXXXX.png'
+          this.data = data.data
+        }
+      })
+    },
+    change() {
+      this.getData()
     }
   },
   components: {
-
+    buttons
   }
 }
 </script>
@@ -120,8 +100,10 @@ export default {
   vertical-align: middle;
   width: 100%;
 }
-.appstore-detail-info {
+.appstore-detail-top {
   margin-bottom: 15px;
+}
+.appstore-detail-info {
   float: left;
 }
 .appstore-detail-info h3 {

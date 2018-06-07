@@ -9,10 +9,10 @@ const routers = [
     children: [
       { path: 'home', component: (slv) => require(['./views/home.vue'], slv), name: 'home' },
       {
-        path: 'config', component: (slv) => require(['./views/config.vue'], slv),
+        path: 'setting', component: (slv) => require(['./views/setting.vue'], slv),
         children: [
-          { path: '/', component: (slv) => require(['./views/config-list.vue'], slv) },
-          { path: 'detail', component: (slv) => require(['./views/config-detail.vue'], slv) }
+          { path: '/', component: (slv) => require(['./views/setting-list.vue'], slv) },
+          { path: 'detail', component: (slv) => require(['./views/setting-detail.vue'], slv) }
         ]
       },
       {

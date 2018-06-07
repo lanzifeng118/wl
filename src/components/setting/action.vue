@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Button size="small" type="success" @click="edit">修改</Button>
-    <Button size="small" type="warning" @click="deleteM">删除</Button>
+    <Button size="small" type="success" icon="edit" @click="edit">修改</Button>
+    <Button size="small" type="warning" icon="trash-a" @click="deleteM">删除</Button>
   </div>
 </template>
 <script>

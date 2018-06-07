@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+import api from 'libs/api'
 export default {
   data() {
     return {
@@ -11,7 +12,7 @@ export default {
       columns: [{
         title: '应用名称',
         align: 'center',
-        key: 'name'
+        key: 'alias'
       }, {
         title: '应用版本',
         align: 'center',
@@ -19,7 +20,7 @@ export default {
       }, {
         title: '最后更新时间',
         align: 'center',
-        key: 'time'
+        key: 'modify_time'
       }, {
         title: '管理',
         align: 'center',
@@ -34,27 +35,24 @@ export default {
   },
   methods: {
     getData() {
+      // 1安装中 2已安装 3未安装 4更新中 5需更新 6卸载中
       this.loading = true
-      let data = {
-        "code": 63008,
-        "data": [
-          {
-            "alias": "测试内容x672",
-            "name": "测试内容l3e7",
-            "time": "测试内容p2qw",
-            "version": "测试内容44z4"
-          },
-          {
-            "alias": "应用1",
-            "name": "应用1",
-            "time": "2019",
-            "version": "5.3.1"
+      this.installedData = []
+      this.axios(api.setting.list())
+        .then(res => {
+          this.loading = false
+
+          let data = res.data
+          console.log(data)
+          if (data.code === 200) {
+            // this.loading = false
+            this.data = data.data
           }
-        ],
-        "msg": "测试内容2326"
-      }
-      this.loading = false
-      this.data = data.data
+        })
+        .catch(err => {
+          console.log(err)
+          this.$Message.error(`获取列表失败`)
+        })
     },
     renderStatus(h, params) {
       return h('Button', {
@@ -69,12 +67,12 @@ export default {
         }
       }, '修改配置')
     },
-    // TODO: name or alias
     toDetail(data) {
       this.$router.push({
-        path: '/config/detail',
+        path: '/setting/detail',
         query: {
-          name: encodeURI(data.alias)
+          name: data.name,
+          alias: encodeURI(data.alias)
         }
       })
     }
