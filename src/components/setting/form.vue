@@ -34,14 +34,18 @@ export default {
       return this.type === 'add' ? null : this.data.values[this.index]
     },
     model() {
-      console.log(this.data)
       let model = {}
       this.data.properties.forEach(val => {
         let key = val.name
+        console.log(val)
         this.type === 'add' ? model[key] = '' : model[key] = this.row[key]
       })
       return model
     }
+  },
+  created() {
+    console.log(this.data)
+    // console.log(this.model)
   },
   methods: {
     submit(name) {
@@ -63,7 +67,7 @@ export default {
           console.log(data)
           if (data.code === 200) {
             this.$Message.success('提交成功!')
-            this._close()
+            this.close()
             this.$emit('update')
           } else {
             this.$Message.error('提交失败!')
@@ -74,7 +78,7 @@ export default {
     reset(name) {
       this.$refs[name].resetFields()
     },
-    _close() {
+    close() {
       this.$emit('close')
     }
   }

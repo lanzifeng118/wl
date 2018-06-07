@@ -7,13 +7,13 @@
     <!-- Tabs -->
     <Tabs v-if="data.length" :animated="true" type="card" v-model="activeTab" @on-click="tabChange">
       <TabPane v-for="(item, index) in data" :label="item.cfg_statement" :name="index.toString()">
-        <Button class="setting-detail-add" type="primary" size="small" shape="circle" icon="plus-round" @click="setForm(item)">添加</Button>
+        <Button class="setting-detail-add" type="primary" size="small" shape="circle" icon="plus-round" @click="setForm('add')">添加</Button>
         <!-- table -->
         <Table height="600" :columns="item.columns" :data="item.values" :border="true" size="small"></Table>
-        <!-- form -->
-        <v-form v-if="item.form.show" :type="item.form.type" :index="item.form.index" :data="item" @close="closeForm(item)" @update="getData"></v-form>
       </TabPane>
     </Tabs>
+    <!-- form -->
+    <v-form v-if="form.show" :type="form.type" :index="form.index" :data="activeData" @close="closeForm" @update="getData"></v-form>
     <Spin fix v-show="loading">
       <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
       <div>加载中</div>
@@ -28,8 +28,13 @@ export default {
   data() {
     return {
       loading: true,
+      data: [],
       activeTab: '0',
-      data: []
+      form: {
+        show: false,
+        type: '',
+        index: ''
+      }
     }
   },
   computed: {
@@ -68,10 +73,6 @@ export default {
         if (data.code === 200) {
           this.loading = false
           data.data.forEach(val => {
-            val.form = {
-              show: false,
-              type: ''
-            }
             val.columns = this._getColumns(val)
           })
           this.data = data.data
@@ -105,7 +106,7 @@ export default {
       return h(action, {
         on: {
           edit: () => {
-            this.setForm(this.activeData, 'edit', params.index)
+            this.setForm('edit', params.index)
           },
           deleteM: () => {
             this._delete(params)
@@ -113,13 +114,15 @@ export default {
         }
       })
     },
-    setForm(item, type = 'add', index) {
-      item.form.type = type
-      item.form.show = true
-      item.form.index = index
+    setForm(type = 'add', index) {
+      this.form.type = type
+      this.form.show = true
+      this.form.index = index
+      console.log('this.form')
+      console.log(this.form)
     },
-    closeForm(item) {
-      item.form.show = false
+    closeForm() {
+      this.form.show = false
     },
     _delete(params) {
       this.$Modal.confirm({
