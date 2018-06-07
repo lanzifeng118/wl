@@ -22,14 +22,11 @@ const routers = [
           { path: 'detail', component: (slv) => require(['./views/appstore-detail.vue'], slv) }
         ]
       },
-      { path: 'statistics', component: (slv) => require(['./views/statistics.vue'], slv) },
-      { path: 'interface', component: (slv) => require(['./views/interface.vue'], slv)},
-      { path: 'task', component: (slv) => require(['./views/interface.vue'], slv) },
+      { path: 'task', component: (slv) => require(['./views/task.vue'], slv) },
       { 
-        path: 'me', component: (slv) => require(['./views/me.vue'], slv), redirect: {name: 'warn'},
+        path: 'me', component: (slv) => require(['./views/me.vue'], slv), redirect: { name: 'msg'},
         children: [
-          { path: 'warn', component: (slv) => require(['./views/me-warn.vue'], slv), name: 'warn' },
-          { path: 'message', component: (slv) => require(['./views/me-message.vue'], slv)},
+          { path: 'message', component: (slv) => require(['./views/me-message.vue'], slv), name: 'msg'},
           { path: 'password', component: (slv) => require(['./views/me-password.vue'], slv)}
         ]
       }

@@ -12,6 +12,11 @@
         <card :data="installedData"></card>
       </TabPane>
     </Tabs>
+     <!-- loading -->
+    <Spin fix v-show="spin">
+      <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
+      <div>加载中</div>
+    </Spin>
   </div>
 </template>
 <script>
@@ -22,6 +27,7 @@ export default {
     return {
       search: '',
       data: [],
+      spin: true,
       installedData: []
     }
   },
@@ -35,6 +41,7 @@ export default {
       this.axios(api.appstore.list())
         .then(res => {
           let data = res.data
+          this.spin = false
           console.log(data)
           if (data.code === 200) {
             // this.loading = false
@@ -48,6 +55,7 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          this.spin = false
           this.$Message.error(`获取列表失败`)
         })
     }

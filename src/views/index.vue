@@ -42,10 +42,6 @@ export default {
         icon: 'gear-a',
         name: 'setting'
       }, {
-        title: '接口管理',
-        icon: 'cloud',
-        name: 'interface'
-      }, {
         title: '定时任务',
         icon: 'ios-alarm',
         name: 'task'
@@ -57,10 +53,6 @@ export default {
         title: '个人中心',
         icon: 'person',
         name: 'me'
-      }, {
-        title: '流量统计',
-        icon: 'arrow-graph-up-right',
-        name: 'statistics'
       }]
     }
   },

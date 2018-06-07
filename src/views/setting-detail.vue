@@ -1,5 +1,5 @@
 <template>
-  <div class="setting-detail">
+  <div class="setting-detail" :style="{height: wrapHeight + 'px'}">
     <div class="setting-detail-back">
       <span>{{alias}}</span>
       <Button type="error" size="small" shape="circle" icon="close-round" @click="_back"></Button>
@@ -15,7 +15,7 @@
     <!-- form -->
     <v-form v-if="form.show" :type="form.type" :index="form.index" :data="activeData" @close="closeForm" @update="getData"></v-form>
     <!-- loading -->
-    <Spin fix v-show="loading">
+    <Spin fix v-show="spin">
       <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
       <div>加载中</div>
     </Spin>
@@ -28,7 +28,7 @@ import vForm from 'components/setting/form'
 export default {
   data() {
     return {
-      loading: true,
+      spin: true,
       data: [],
       activeTab: '0',
       form: {
@@ -58,6 +58,9 @@ export default {
     },
     tableHeight() {
       return this.$store.getters.winHeigth - 178
+    },
+    wrapHeight() {
+      return this.$store.getters.winHeigth - 95
     }
   },
   watch: {
@@ -70,12 +73,12 @@ export default {
   },
   methods: {
     getData() {
-      this.loading = true
+      this.spin = true
       this.axios(api.setting.detail(this.name)).then(res => {
         let data = res.data
         console.log(data)
         if (data.code === 200) {
-          this.loading = false
+          this.spin = false
           data.data.forEach(val => {
             val.columns = this._getColumns(val)
           })

@@ -10,15 +10,15 @@
         </div>
       </div>
     </div>
-    <Tabs type="card" :animated="false">
+    <Tabs type="card" :animated="true">
       <TabPane label="详细内容">
         {{data.content}}
       </TabPane>
       <TabPane label="客户案例">
-        <Table :columns="cus.columns" :data="data.install_info" :width="650" size="small"></Table>
+        <Table :height="tableHeight" :columns="cus.columns" :data="data.install_info" :width="650" size="small"></Table>
       </TabPane>
       <TabPane label="更新日志">
-        <Table :columns="upgrade.columns" :data="data.upgrade_info" :width="650" size="small"></Table>
+        <Table :height="tableHeight" :columns="upgrade.columns" :data="data.upgrade_info" :width="650" size="small"></Table>
       </TabPane>
     </Tabs>
   </div>
@@ -52,6 +52,9 @@ export default {
   computed: {
     name() {
       return this.$route.query.name
+    },
+    tableHeight() {
+      return this.$store.getters.winHeigth - 250
     }
   },
   created() {

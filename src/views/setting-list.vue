@@ -63,7 +63,8 @@ export default {
       return h('Button', {
         props: {
           type: 'primary',
-          size: 'small'
+          size: 'small',
+          icon: 'edit'
         },
         on: {
           click: () => {

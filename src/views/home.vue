@@ -52,7 +52,8 @@ export default {
           render: this.renderAction
         }
       ],
-      data: []
+      data: [],
+      timer: null
     }
   },
   computed: {
@@ -61,13 +62,18 @@ export default {
     }
   },
   created() {
-    // console.log(action)
     this.getData()
+    this.timer = setInterval(() => {
+      this.getData(true)
+    }, 5000)
+  },
+  destroyed() {
+    clearInterval(this.timer)
   },
   methods: {
-    getData(callback) {
+    getData(reload = false, callback) {
       // 1：online；2：stopped；3：unload
-      if (!callback) {
+      if (!reload) {
         this.loading = true
       }
       this.axios(api.dashboard.list()).then(res => {
@@ -166,7 +172,7 @@ export default {
             let data = res.data
             console.log(data)
             if (data.code === 200) {
-              this.getData(() => {
+              this.getData(true, () => {
                 this.$Message.success(`${text}成功`)
                 this.$Modal.remove()
               })

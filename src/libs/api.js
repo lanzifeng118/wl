@@ -1,6 +1,7 @@
 const dashboardUrl = '/doapi-v2/dashboard'
 const appUrl = '/doapi-v2/appstore'
 const settingUrl = '/doapi-v2/appsetting'
+const taskUrl = '/doapi-v2/schedule'
 
 let queryFun = (url, method = 'query', pageData) => {
   let data = { method }
@@ -59,6 +60,11 @@ let api = {
     delete(data) {
       return queryFun(settingUrl, 'setting.app.delete', data)
     }
+  },
+  task: {
+    list() {
+      return queryFun(taskUrl, 'job.list')
+    },
   }
 }
 export default api
