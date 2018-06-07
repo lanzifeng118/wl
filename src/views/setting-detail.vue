@@ -2,7 +2,7 @@
   <div class="setting-detail">
     <div class="setting-detail-back">
       <span>{{alias}}</span>
-      <Button type="error" size="small" shape="circle" icon="close-round" @click="back"></Button>
+      <Button type="error" size="small" shape="circle" icon="close-round" @click="_back"></Button>
     </div>
     <!-- Tabs -->
     <Tabs v-if="data.length" :animated="true" type="card" v-model="activeTab" @on-click="tabChange">
