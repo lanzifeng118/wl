@@ -9,11 +9,12 @@
       <TabPane v-for="(item, index) in data" :label="item.cfg_statement" :name="index.toString()">
         <Button class="setting-detail-add" type="primary" size="small" shape="circle" icon="plus-round" @click="setForm('add')">添加</Button>
         <!-- table -->
-        <Table height="600" :columns="item.columns" :data="item.values" :border="true" size="small"></Table>
+        <Table :height="tableHeight" :columns="item.columns" :data="item.values" :border="true" size="small"></Table>
       </TabPane>
     </Tabs>
     <!-- form -->
     <v-form v-if="form.show" :type="form.type" :index="form.index" :data="activeData" @close="closeForm" @update="getData"></v-form>
+    <!-- loading -->
     <Spin fix v-show="loading">
       <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
       <div>加载中</div>
@@ -54,6 +55,9 @@ export default {
     },
     activeData() {
       return this.data[this.activeTab]
+    },
+    tableHeight() {
+      return this.$store.getters.winHeigth - 178
     }
   },
   watch: {
@@ -118,8 +122,6 @@ export default {
       this.form.type = type
       this.form.show = true
       this.form.index = index
-      console.log('this.form')
-      console.log(this.form)
     },
     closeForm() {
       this.form.show = false

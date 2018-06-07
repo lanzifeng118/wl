@@ -1,5 +1,5 @@
 <template>
-  <div class="config">
+  <div class="setting">
     <router-view></router-view>
   </div>
 </template>
@@ -13,6 +13,6 @@ export default {
 }
 </script>
 <style scoped>
-.config {
+.setting {
 }
 </style>

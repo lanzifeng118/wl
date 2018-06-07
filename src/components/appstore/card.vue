@@ -1,13 +1,13 @@
 <template>
-  <div class="appstore-cards f-clearfix">
+  <div class="appstore-cards f-clearfix" :style="{height: height + 'px'}">
     <div class="appstore-card" v-for="item in data" @click="toDetail(item.name)">
       <Card>
-        <div class="appstore-cards-title f-clearfix">
+        <div class="appstore-card-title f-clearfix">
           <h4>{{item.alias}}</h4>
           <p>{{item.version}}</p>
         </div>
-        <p class="appstore-cards-brief">{{item.brief}}</p>
-        <div class="appstore-cards-buttoms">
+        <p class="appstore-card-brief">{{item.brief}}</p>
+        <div class="appstore-card-buttoms">
           <buttons :item="item" @change="change"></buttons>
         </div>
       </Card>
@@ -19,6 +19,11 @@ import buttons from 'components/appstore/buttons.vue'
 import api from 'libs/api'
 export default {
   props: ['data'],
+  computed: {
+    height() {
+      return this.$store.getters.winHeigth - 160
+    }
+  },
   methods: {
     toDetail(name) {
       this.$router.push({
@@ -38,6 +43,9 @@ export default {
 }
 </script>
 <style>
+.appstore-cards {
+  overflow: auto;
+}
 .appstore-card {
   float: left;
   cursor: pointer;
@@ -45,20 +53,20 @@ export default {
   margin-bottom: 10px;
   margin-right: 10px;
 }
-.appstore-cards-title {
+.appstore-card-title {
   margin-bottom: 5px;
 }
-.appstore-cards-title > h4 {
+.appstore-card-title > h4 {
   float: left;
 }
-.appstore-cards-title > p {
+.appstore-card-title > p {
   float: right;
 }
-.appstore-cards-brief {
+.appstore-card-brief {
   color: #aaa;
   margin-bottom: 5px;
 }
-.appstore-cards-buttoms {
+.appstore-card-buttoms {
   text-align: right;
 }
 </style>

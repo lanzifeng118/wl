@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Table height="600" :columns="columns" :data="data" :border="true" size="small" :loading="loading"></Table>
+    <Table :height="tableHeight" :columns="columns" :data="data" :border="true" size="small" :loading="loading"></Table>
   </div>
 </template>
 <script>
@@ -53,6 +53,11 @@ export default {
         }
       ],
       data: []
+    }
+  },
+  computed: {
+    tableHeight() {
+      return this.$store.getters.winHeigth - 100
     }
   },
   created() {

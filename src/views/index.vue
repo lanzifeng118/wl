@@ -61,8 +61,7 @@ export default {
         title: '流量统计',
         icon: 'arrow-graph-up-right',
         name: 'statistics'
-      }
-      ]
+      }]
     }
   },
   computed: {

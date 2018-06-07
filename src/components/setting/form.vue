@@ -10,7 +10,10 @@
           :prop="label.name" 
           :rules="{required: true, message: label.title + '不能为空', trigger: 'blur'}"
         >
-          <Input type="text" v-model="model[label.name]"></Input>
+          <Input v-if="label.format === 'input'" type="text" v-model="model[label.name]"></Input>
+          <Select v-else="label.format === 'select'" v-model="model[label.name]">
+            <Option v-for="item in label.enum" :value="item">{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem>
           <Button type="primary" @click="submit('formValidate')" :loading="loading">提交</Button>
@@ -37,7 +40,6 @@ export default {
       let model = {}
       this.data.properties.forEach(val => {
         let key = val.name
-        console.log(val)
         this.type === 'add' ? model[key] = '' : model[key] = this.row[key]
       })
       return model
