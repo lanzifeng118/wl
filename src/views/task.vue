@@ -1,9 +1,13 @@
 <template>
-  <div class="task">
-    <Table :height="tableHeight" :columns="columns" :data="data" :border="true" size="small" :loading="loading"></Table>
+  <div class="task">
+    <div class="task-top">
+      <Button v-if="schedule !== null" :type="schedule ? 'warning' : 'success'" :icon="schedule ? 'pause' : 'play'" @click="changeSchedule">{{schedule ? '停止' : '启动'}}任务调度器</Button>
+    </div>
+    <Table :height="tableHeight" :columns="columns" :data="jobs" :border="true" size="small" :loading="loading"></Table>
     <div v-if="mask" class="task-form ivu-modal-mask">
       <div class="task-form-content">
         <Button type="error" size="small" shape="circle" icon="close-round" class="task-form-close" @click="close"></Button>
+        <!-- Form -->
         <Form ref="formValidate" :model="model" label-position="right" :label-width="100">
           <FormItem label="任务名称">
             {{model.name}}
@@ -11,13 +15,18 @@
           <FormItem 
             label="时间表达式" 
             :prop="model.repeat_interval" 
-            :rules="{required: true, message: '时间表达式不能为空', trigger: 'blur'}">
+          >
             <Input type="text" v-model="model.repeat_interval"></Input>
           </FormItem>
-            <!-- <Input type="text" v-model="model[label.name]"></Input> -->
+          <FormItem label="状态">
+            <Switch size="large" v-model="model.enable">
+              <span slot="open">ON</span>
+              <span slot="close">OFF</span>
+            </Switch>
+          </FormItem>
+          <!-- <Input type="text" v-model="model[label.name]"></Input> -->
           <FormItem>
             <Button type="primary" @click="submit('formValidate')" :loading="submiting">提交</Button>
-            <Button type="ghost" @click="reset('formValidate')" style="margin-left: 8px">重置</Button>
           </FormItem>
         </Form>
       </div>
@@ -26,9 +35,7 @@
 </template>
 <script>
 import action from 'components/task/action'
-import note from 'components/home/note'
-import restart from 'components/home/restartTime'
-import status from 'components/home/status'
+import status from 'components/task/status'
 import api from 'libs/api'
 
 export default {
@@ -45,13 +52,14 @@ export default {
           key: 'app_name'
         },
         {
-          title: '任务名',
+          title: '任务名称',
           align: 'center',
           key: 'name'
         },
         {
-          title: '运行状态',
+          title: '状态',
           align: 'center',
+          width: 120,
           render: this.renderStatus
         },
         {
@@ -72,11 +80,12 @@ export default {
         {
           title: '操作',
           align: 'center',
-          width: 260,
+          width: 240,
           render: this.renderAction
         }
       ],
-      data: []
+      jobs: [],
+      schedule: null // 0：停止；1：启动
     }
   },
   computed: {
@@ -100,7 +109,8 @@ export default {
           this.loading = false
           if (data.code === 200) {
             // data.data[0].loop_delay = '600ms'
-            this.data = data.data
+            this.jobs = data.data.job
+            this.schedule = data.data.schedule
             callback && callback()
           }
         })
@@ -113,7 +123,7 @@ export default {
     renderStatus(h, params) {
       return h(status, {
         props: {
-          status: params.row.status
+          status: params.row.enable
         }
       })
     },
@@ -131,16 +141,17 @@ export default {
             this.actionClick('stop', params)
           },
           edit: () => {
+            let job = this.jobs[params.index]
+            this.model.name = job.name
+            this.model.enable = job.enable
+            this.model.repeat_interval = job.repeat_interval
             this.mask = true
-            this.model = this.data[params.index]
           }
         }
       })
     },
     actionClick(type, params) {
-      console.log(type)
-      let text,
-        name = params.row.name
+      let text, name = params.row.name
       switch (type) {
         case 'start':
           text = '开启'
@@ -151,25 +162,87 @@ export default {
       }
       this.$Modal.confirm({
         title: type.toUpperCase(),
-        content: `<p>确定${text}应用【${name}】</p>`,
+        content: `<p>确定${text}任务【${name}】</p>`,
         loading: true,
         onOk: () => {
-          this.axios(api.dashboard[type](name))
+          this.axios(api.task[`${type}Job`](name))
             .then(res => {
               let data = res.data
               console.log(data)
               if (data.code === 200) {
                 this.getData(true, () => {
-                  this.$Message.success(`${text}成功`)
+                  this.$Message.success(`${text}任务【${name}】成功`)
                   this.$Modal.remove()
                 })
               }
             })
             .catch(err => {
-              this.$Message.error(`${text}失败`)
+              this.$Message.error(`${text}任务【${name}】失败`)
               this.$Modal.remove()
             })
         }
+      })
+    },
+    changeSchedule() {
+      let text, action
+      console.log(this.schedule)
+      switch (this.schedule) {
+        case 0:
+          action = 'start'
+          text = '开启'
+          break
+        case 1:
+          action = 'stop'
+          text = '停止'
+          break
+      }
+      this.$Modal.confirm({
+        title: action.toUpperCase(),
+        content: `<p>确定${text}任务调度器</p>`,
+        loading: true,
+        onOk: () => {
+          this.axios(api.task[`${action}Scheduel`]())
+            .then(res => {
+              let data = res.data
+              console.log(data)
+              if (data.code === 200) {
+                this.getData(true, () => {
+                  this.$Message.success(`${text}任务调度器成功`)
+                  this.$Modal.remove()
+                })
+              }
+            })
+            .catch(err => {
+              this.$Message.error(`${text}任务调度器失败`)
+              this.$Modal.remove()
+            })
+        }
+      })
+    },
+    submit(name) {
+      console.log(this.model)
+      this.$refs[name].validate(valid => {
+        if (!valid) {
+          return
+        }
+        this.submiting = true
+        this.axios(api.task.editJob(this.model)).then(res => {
+          this.submiting = false
+          this.close()
+          let data = res.data
+          console.log(data)
+          if (data.code === 200) {
+            this.getData(true, () => {
+              this.$Message.success('修改成功!')
+            })
+          } else {
+            this.$Message.error('修改失败!')
+          }
+        }).catch(err => {
+          this.submiting = false
+          this.$Message.error('修改失败!')
+          this.close()
+        })
       })
     },
     close() {
@@ -178,15 +251,17 @@ export default {
   },
   components: {
     action,
-    note,
-    restart,
     status
   }
 }
 </script>
+
 <style>
 .task {
   margin: 25px;
+}
+.task-top {
+  margin-bottom: 15px;
 }
 .task-form-content {
   position: relative;
@@ -200,7 +275,8 @@ export default {
   text-align: center;
   margin-bottom: 20px;
 }
-.task-form-content .ivu-btn-circle.ivu-btn-icon-only.ivu-btn-small.task-form-close{
+.task-form-content
+  .ivu-btn-circle.ivu-btn-icon-only.ivu-btn-small.task-form-close {
   position: absolute;
   z-index: 2;
   top: 12px;

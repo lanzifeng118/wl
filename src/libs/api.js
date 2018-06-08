@@ -65,6 +65,21 @@ let api = {
     list() {
       return queryFun(taskUrl, 'job.list')
     },
+    startJob(name) {
+      return queryFun(taskUrl, 'job.enable', { name })
+    },
+    stopJob(name) {
+      return queryFun(taskUrl, 'job.disable', { name })
+    },
+    editJob(data) {
+      return queryFun(taskUrl, 'job.change', data)
+    },
+    startScheduel() {
+      return queryFun(taskUrl, 'schedule.start')
+    },
+    stopScheduel() {
+      return queryFun(taskUrl, 'schedule.stop')
+    }
   }
 }
 export default api
