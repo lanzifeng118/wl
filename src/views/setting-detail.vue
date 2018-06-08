@@ -12,8 +12,11 @@
         <Table :height="tableHeight" :columns="item.columns" :data="item.values" :border="true" size="small"></Table>
       </TabPane>
     </Tabs>
-    <!-- form -->
-    <v-form v-if="form.show" :type="form.type" :index="form.index" :data="activeData" @close="closeForm" @update="getData"></v-form>
+    <!-- Modal -->
+    <Modal class="setting-detail-edit-modal" v-model="editModal" width="600" :closable="false" :mask-closable="false">
+      <v-form v-if="activeData" :type="form.type" :index="form.index" :data="activeData" @close="closeForm" @update="getData"></v-form>
+      <div slot="footer"></div>
+    </Modal>
     <!-- loading -->
     <Spin fix v-show="spin">
       <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
@@ -28,11 +31,11 @@ import vForm from 'components/setting/form'
 export default {
   data() {
     return {
+      editModal: false,
       spin: true,
       data: [],
       activeTab: '0',
       form: {
-        show: false,
         type: '',
         index: ''
       }
@@ -54,6 +57,8 @@ export default {
       this._back()
     },
     activeData() {
+      // console.log('activeData')
+      // console.log(this.data[this.activeTab])
       return this.data[this.activeTab]
     },
     tableHeight() {
@@ -122,12 +127,12 @@ export default {
       })
     },
     setForm(type = 'add', index) {
+      this.editModal = true
       this.form.type = type
-      this.form.show = true
       this.form.index = index
     },
     closeForm() {
-      this.form.show = false
+      this.editModal = false
     },
     _delete(params) {
       this.$Modal.confirm({
@@ -200,5 +205,9 @@ export default {
 .setting-detail-add.ivu-btn > .ivu-icon + span,
 .ivu-btn > span + .ivu-icon {
   margin-left: 0;
+}
+
+.setting-detail-edit-modal .ivu-modal-footer {
+  display: none;
 }
 </style>

@@ -1,26 +1,23 @@
 <template>
-  <div class="setting-form ivu-modal-mask">
-    <div class="setting-form-content">
-      <p class="setting-form-title">{{type === 'edit' ? '修改' : '添加'}} - {{data.cfg_statement}}</p>
-      <Button type="error" size="small" shape="circle" icon="close-round" class="setting-form-close" @click="close"></Button>
-      <Form ref="formValidate" :model="model" label-position="right" :label-width="100">
-        <FormItem 
-          v-for="(label, index) in data.properties" 
-          :label="label.title" 
-          :prop="label.name" 
-          :rules="{required: true, message: label.title + '不能为空', trigger: 'blur'}"
-        >
-          <Input v-if="label.format === 'input'" type="text" v-model="model[label.name]"></Input>
-          <Select v-else="label.format === 'select'" v-model="model[label.name]">
-            <Option v-for="item in label.enum" :value="item">{{ item }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="submit('formValidate')" :loading="loading">提交</Button>
-          <Button type="ghost" @click="reset('formValidate')" style="margin-left: 8px">重置</Button>
-        </FormItem>
-      </Form>
-    </div>
+  <div class="setting-form">
+    <p class="setting-form-title">{{type === 'edit' ? '修改' : '添加'}} - {{data.cfg_statement}}</p>
+    <Form ref="formValidate" :model="model" label-position="right" :label-width="100">
+      <FormItem 
+        v-for="(label, index) in data.properties" 
+        :label="label.title" 
+        :prop="label.name" 
+        :rules="{required: true, message: label.title + '不能为空', trigger: 'blur'}"
+      >
+        <Input v-if="label.format === 'input'" type="text" v-model="model[label.name]"></Input>
+        <Select v-else="label.format === 'select'" v-model="model[label.name]">
+          <Option v-for="item in label.enum" :value="item">{{ item }}</Option>
+        </Select>
+      </FormItem>
+      <div class="setting-form-buttons">
+        <Button type="text" size="large" @click="close">取消</Button>
+        <Button type="primary" size="large" @click="submit('formValidate')" :loading="loading">提交</Button>
+      </div>
+    </Form>
   </div>
 </template>
 <script>
@@ -34,13 +31,13 @@ export default {
   },
   computed: {
     row() {
-      return this.type === 'add' ? null : this.data.values[this.index]
+      return this.type === 'edit' ? this.data.values[this.index] : null
     },
     model() {
       let model = {}
       this.data.properties.forEach(val => {
         let key = val.name
-        this.type === 'add' ? model[key] = '' : model[key] = this.row[key]
+        this.type === 'edit' ? model[key] = this.row[key] : model[key] = ''
       })
       return model
     }
@@ -77,9 +74,6 @@ export default {
         })
       })
     },
-    reset(name) {
-      this.$refs[name].resetFields()
-    },
     close() {
       this.$emit('close')
     }
@@ -87,25 +81,12 @@ export default {
 }
 </script>
 <style>
-.setting-form-content {
-  position: relative;
-  padding: 20px;
-  border-radius: 5px;
-  background-color: #fff;
-  width: 600px;
-  margin: 100px auto;
-}
 .setting-form-title {
   text-align: center;
   margin-bottom: 20px;
 }
-.setting-form-content .ivu-btn-circle.ivu-btn-icon-only.ivu-btn-small.setting-form-close{
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 20px;
-  height: 20px;
-  font-size: 12px;
+.setting-form-buttons {
+  text-align: right;
 }
 </style>
 

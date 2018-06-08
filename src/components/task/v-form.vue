@@ -1,9 +1,7 @@
 <template>
-  <Form ref="formValidate" v-model="data" label-position="right" :label-width="100">
-    <FormItem label="任务名称">
-      {{data.name}}
-    </FormItem>
-    <FormItem label="时间表达式" :prop="data.repeat_interval">
+  <Form class="task-form" ref="formValidate" v-model="data" label-position="right" :label-width="100">
+    <div class="task-form-title">修改 - {{data.name}}</div>
+    <FormItem label="时间表达式" :prop="data.repeat_interval" style="margin-bottom: 0px;">
       <Input type="text" v-model="data.repeat_interval" @input="input"></Input>
       <Tooltip placement="top" class="task-tooltip">
         <Icon type="help-circled"></Icon>
@@ -26,6 +24,10 @@ export default {
 }
 </script>
 <style>
+.task-form-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
 .task-tooltip {
   position: absolute;
   top: 0;

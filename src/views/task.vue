@@ -4,7 +4,8 @@
       <Button v-if="schedule !== null" :type="schedule ? 'warning' : 'success'" :icon="schedule ? 'pause' : 'play'" @click="changeSchedule">{{schedule ? '停止' : '启动'}}任务调度器</Button>
     </div>
     <Table :height="tableHeight" :columns="columns" :data="jobs" :border="true" size="small" :loading="loading"></Table>
-    <Modal v-model="edit.modal" width="600" :closable="false" :mask-closable="false">
+    <!-- edit -->
+    <Modal class="task-modal" v-model="edit.modal" width="600" :closable="false" :mask-closable="false">
       <v-form :data="edit.data" @input="editInput"></v-form>
       <div slot="footer">
         <Button size="large" type="text" :loading="edit.submiting" @click="cancle">取消</Button>
@@ -281,5 +282,8 @@ export default {
 }
 .task-tooltip a {
   color: #fff;
+}
+.task-modal .ivu-modal-footer {
+  border-top: none;
 }
 </style>
