@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
-    "echarts": "^4.0.4",
+    "cron-parser": "^2.5.0",
     "iview": "^2.0.0-rc.8",
     "vue": "^2.2.6",
     "vue-axios": "^2.1.1",

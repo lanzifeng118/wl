@@ -18,12 +18,6 @@
           >
             <Input type="text" v-model="model.repeat_interval"></Input>
           </FormItem>
-          <FormItem label="状态">
-            <Switch size="large" v-model="model.enable">
-              <span slot="open">ON</span>
-              <span slot="close">OFF</span>
-            </Switch>
-          </FormItem>
           <!-- <Input type="text" v-model="model[label.name]"></Input> -->
           <FormItem>
             <Button type="primary" @click="submit('formValidate')" :loading="submiting">提交</Button>
@@ -36,6 +30,7 @@
 <script>
 import action from 'components/task/action'
 import status from 'components/task/status'
+import parser from 'cron-parser'
 import api from 'libs/api'
 
 export default {
@@ -90,11 +85,13 @@ export default {
   },
   computed: {
     tableHeight() {
-      return this.$store.getters.winHeigth - 100
+      return this.$store.getters.winHeigth - 150
     }
   },
   created() {
     this.getData()
+    console.log('CronParser')
+    console.log(parser.parseExpression('* */2 */1 *').next())
   },
   methods: {
     getData(reload = false, callback) {
@@ -123,7 +120,8 @@ export default {
     renderStatus(h, params) {
       return h(status, {
         props: {
-          status: params.row.enable
+          status: params.row.enable,
+          schedule: this.schedule
         }
       })
     },
@@ -131,7 +129,8 @@ export default {
       // console.log(params)
       return h(action, {
         props: {
-          params: params
+          params: params,
+          schedule: this.schedule
         },
         on: {
           start: () => {
@@ -143,7 +142,6 @@ export default {
           edit: () => {
             let job = this.jobs[params.index]
             this.model.name = job.name
-            this.model.enable = job.enable
             this.model.repeat_interval = job.repeat_interval
             this.mask = true
           }
