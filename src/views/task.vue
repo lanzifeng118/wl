@@ -4,42 +4,30 @@
       <Button v-if="schedule !== null" :type="schedule ? 'warning' : 'success'" :icon="schedule ? 'pause' : 'play'" @click="changeSchedule">{{schedule ? '停止' : '启动'}}任务调度器</Button>
     </div>
     <Table :height="tableHeight" :columns="columns" :data="jobs" :border="true" size="small" :loading="loading"></Table>
-    <div v-if="mask" class="task-form ivu-modal-mask">
-      <div class="task-form-content">
-        <Button type="error" size="small" shape="circle" icon="close-round" class="task-form-close" @click="close"></Button>
-        <!-- Form -->
-        <Form ref="formValidate" :model="model" label-position="right" :label-width="100">
-          <FormItem label="任务名称">
-            {{model.name}}
-          </FormItem>
-          <FormItem 
-            label="时间表达式" 
-            :prop="model.repeat_interval" 
-          >
-            <Input type="text" v-model="model.repeat_interval"></Input>
-          </FormItem>
-          <!-- <Input type="text" v-model="model[label.name]"></Input> -->
-          <FormItem>
-            <Button type="primary" @click="submit('formValidate')" :loading="submiting">提交</Button>
-          </FormItem>
-        </Form>
+    <Modal v-model="edit.modal" width="600" :closable="false" :mask-closable="false">
+      <v-form :data="edit.data" @input="editInput"></v-form>
+      <div slot="footer">
+        <Button size="large" type="text" :loading="edit.submiting" @click="cancle">取消</Button>
+        <Button type="primary" size="large" :loading="edit.submiting" @click="submit">提交</Button>
       </div>
-    </div>
+    </Modal>
   </div>
 </template>
 <script>
 import action from 'components/task/action'
 import status from 'components/task/status'
-import parser from 'cron-parser'
+import vForm from 'components/task/v-form'
 import api from 'libs/api'
 
 export default {
   data() {
     return {
-      mask: false,
-      model: {},
+      edit: {
+        modal: false,
+        data: {},
+        submiting: false
+      },
       loading: true,
-      submiting: false,
       columns: [
         {
           title: '应用名称',
@@ -90,8 +78,6 @@ export default {
   },
   created() {
     this.getData()
-    console.log('CronParser')
-    console.log(parser.parseExpression('* */2 */1 *').next())
   },
   methods: {
     getData(reload = false, callback) {
@@ -141,15 +127,19 @@ export default {
           },
           edit: () => {
             let job = this.jobs[params.index]
-            this.model.name = job.name
-            this.model.repeat_interval = job.repeat_interval
-            this.mask = true
+            this.$set(this.edit.data, 'name', job.name)
+            this.$set(this.edit.data, 'repeat_interval', job.repeat_interval)
+            this.edit.modal = true
           }
         }
       })
     },
+    editInput(val) {
+      this.$set(this.edit.data, 'repeat_interval', val)
+    },
     actionClick(type, params) {
-      let text, name = params.row.name
+      let text,
+        name = params.row.name
       switch (type) {
         case 'start':
           text = '开启'
@@ -217,31 +207,31 @@ export default {
         }
       })
     },
-    submit(name) {
-      console.log(this.model)
-      this.$refs[name].validate(valid => {
-        if (!valid) {
-          return
-        }
-        this.submiting = true
-        this.axios(api.task.editJob(this.model)).then(res => {
-          this.submiting = false
-          this.close()
+    submit() {
+      this.edit.submiting = true
+      this.axios(api.task.editJob(this.edit.data))
+        .then(res => {
+          this.edit.submiting = false
           let data = res.data
           console.log(data)
           if (data.code === 200) {
+            this.edit.modal = false
             this.getData(true, () => {
               this.$Message.success('修改成功!')
             })
+          } else if (data.code === 101) {
+            this.$Message.error('时间表达式有误，修改失败!')
           } else {
             this.$Message.error('修改失败!')
           }
-        }).catch(err => {
-          this.submiting = false
-          this.$Message.error('修改失败!')
-          this.close()
         })
-      })
+        .catch(err => {
+          this.edit.submiting = false
+          this.$Message.error('服务器出错了!')
+        })
+    },
+    cancle() {
+      this.edit.modal = false
     },
     close() {
       this.mask = false
@@ -249,7 +239,8 @@ export default {
   },
   components: {
     action,
-    status
+    status,
+    vForm
   }
 }
 </script>
@@ -282,5 +273,13 @@ export default {
   width: 20px;
   height: 20px;
   font-size: 12px;
+}
+.task-tooltip {
+  position: absolute;
+  top: 0;
+  left: -95px;
+}
+.task-tooltip a {
+  color: #fff;
 }
 </style>

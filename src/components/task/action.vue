@@ -10,7 +10,6 @@ export default {
   props: ['params', 'schedule'],
   computed: {
     isStop() {
-      console.log(this.schedule)
       return this.schedule === 0
     },
     enable() {
@@ -18,6 +17,9 @@ export default {
     }
   },
   methods: {
+    ok() {
+
+    },
     start() {
       this.$emit('start')
     },
