@@ -126,7 +126,7 @@ export default {
         console.log(data)
         if (data.code === 200) {
           this.$router.push({
-            path: '/logout',
+            path: '/login',
             query: {
               redirect: this.$route.path
             }
