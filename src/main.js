@@ -27,7 +27,38 @@ const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     Util.title(to.meta.title);
-    next();
+    
+    let cookie = Util.getCookie()
+    
+    let user = cookie.account
+    store.commit('setUsername', user)
+    
+    let matched = to.matched
+    
+    if (matched.length === 0) {
+        from.name ? next({ name: from.name }) : next('/home')
+        return
+    }
+
+    if (matched.some(v => v.meta.hasLogin)) {
+        if (!user) {
+            next({
+                path: '/login',
+                query: { redirect: to.fullPath }
+            })
+        } else {
+            next()
+        }
+    } else if (to.meta.loginPage) {
+        if (user) {
+            next('/home')
+        } else {
+            next()
+        }
+    } else {
+        next()
+    }
+    next()
 });
 
 router.afterEach((to, from, next) => {

@@ -4,10 +4,24 @@
       <Header class="header" style="height: 50px; line-height: 50px; color: #ccc; background: #292f3b; font-size: 20px;">
         <div class="header-name">DOAPI</div>
         <div class="header-info">
-          <Badge count="5" style="margin-right: 10px;">
-            <Icon type="ios-bell-outline" size="26"></Icon>
-          </Badge>
-          <Avatar shape="circle" icon="person" size="small" />
+          <!-- 消息 -->
+          <div class="header-sms" @click="goSms">
+            <Badge :overflow-count="9" :count="usersms">
+              <Icon type="ios-bell-outline" size="26"></Icon>
+            </Badge>
+          </div>
+          <!-- 头像 -->
+          <Poptip trigger="hover" placement="bottom-end" class="header-person">
+            <Avatar size="small" icon="person" />
+            <div slot="content">
+              <div class="header-person-btn">
+                 <router-link to="/me"><Icon type="person"></Icon>个人中心</router-link>
+              </div>
+              <div class="header-person-btn" @click="logout">
+                <Icon type="power"></Icon>退出
+              </div>
+            </div>
+          </Poptip>
         </div>
       </Header>
     <Layout>
@@ -29,6 +43,7 @@
   </div>
 </template>
 <script>
+import api from 'libs/api'
 export default {
   data() {
     return {
@@ -59,6 +74,9 @@ export default {
   computed: {
     contentHeight() {
       return this.$store.getters.winHeigth - 50
+    },
+    usersms() {
+      return this.$store.getters.usersms
     }
   },
   watch: {
@@ -66,17 +84,55 @@ export default {
       this.setMenuActive()
     }
   },
+  created() {
+    this.$store.dispatch('setUsersms')
+  },
   mounted() {
     this.setMenuActive()
-    // this.activeName = name
   },
   methods: {
+    getUsersms() {
+      this.axios(api.signout()).then(res => {
+        let data = res.data
+        console.log(data)
+        if (data.code === 200) {
+          this.$router.push({
+            path: '/logout',
+            query: {
+              redirect: this.$route.path
+            }
+          })
+        }
+      })
+    },
+    goSms() {
+      this.$router.push({
+        path: '/me/message',
+        query: {
+          type: '2'
+        }
+      })
+    },
     setMenuActive() {
       let path = this.$route.path.split('/')[1]
       this.activeName = path
     },
     menuSelect(name) {
       this.$router.push(`/${name}`)
+    },
+    logout() {
+      this.axios(api.signout()).then(res => {
+        let data = res.data
+        console.log(data)
+        if (data.code === 200) {
+          this.$router.push({
+            path: '/logout',
+            query: {
+              redirect: this.$route.path
+            }
+          })
+        }
+      })
     }
   }
 }
@@ -98,6 +154,17 @@ export default {
   margin: 0 auto;
   margin-right: 20px;
 }
+.header-sms {
+  margin-right: 15px; 
+  cursor: pointer;
+  display: inline-block;
+}
+.header-sms .ivu-icon-ios-bell-outline {
+  transition: all 0.2s;
+}
+.header-sms:hover .ivu-icon-ios-bell-outline {
+  color: #fff;
+}
 .header .ivu-badge-count {
   width: 16px;
   height: 16px;
@@ -106,6 +173,31 @@ export default {
   min-width: 16px;
   padding: 0;
   box-shadow: none;
+}
+.header-person-btn {
+  color: #999;
+  text-align: center;
+  line-height: 50px;
+  border-bottom: 1px solid #f3f3f3;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.header-person-btn a {
+  color: #999;
+}
+.header-person-btn:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.header-person-btn:hover, .header-person-btn:hover a {
+  color: #666;
+  background-color: #f3f3f3;
+}
+.header-person .ivu-poptip-body {
+  padding: 0;
+}
+.header-person-btn .ivu-icon {
+  margin-right: 5px;
 }
 </style>
 

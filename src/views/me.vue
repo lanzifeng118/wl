@@ -2,12 +2,12 @@
   <div class="me">
     <Menu mode="horizontal" :active-name="activeName" style="height: 50px; line-height: 50px;" @on-select="menuSelect">
       <MenuItem name="message">
-        <Icon type="ios-bell"></Icon>
-        消息中心
+      <Icon type="ios-bell"></Icon>
+      消息中心
       </MenuItem>
       <MenuItem name="password">
-        <Icon type="settings"></Icon>
-        修改密码
+      <Icon type="settings"></Icon>
+      修改密码
       </MenuItem>
     </Menu>
     <router-view></router-view>
@@ -18,6 +18,11 @@ export default {
   data() {
     return {
       activeName: ''
+    }
+  },
+  watch: {
+    $route(to, from) {
+      this.setMenuActive()
     }
   },
   mounted() {

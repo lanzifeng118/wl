@@ -1,17 +1,20 @@
 const routers = [
+  { 
+    path: '/login', 
+    component: (slv) => require(['./views/login.vue'], slv), 
+    meta: { loginPage: true, title: '登陆' }
+  },
   {
     path: '/',
-    meta: {
-      title: ''
-    },
+    meta: { hasLogin: true },
     component: (slv) => require(['./views/index.vue'], slv),
     redirect: { name: 'home' },
     children: [
-      { path: 'home', component: (slv) => require(['./views/home.vue'], slv), name: 'home' },
+      { path: 'home', component: (slv) => require(['./views/home.vue'], slv), name: 'home', meta: { title: '控制面板'} },
       {
         path: 'setting', component: (slv) => require(['./views/setting.vue'], slv),
         children: [
-          { path: '/', component: (slv) => require(['./views/setting-list.vue'], slv) },
+          { path: '/', component: (slv) => require(['./views/setting-list.vue'], slv), meta: { title: '应用配置' } },
           { path: 'detail', component: (slv) => require(['./views/setting-detail.vue'], slv) }
         ]
       },
@@ -32,9 +35,6 @@ const routers = [
       }
       
     ]
-  },
-  {
-    path: '/login', component: (slv) => require(['./views/login.vue'], slv)
   }
 ];
 export default routers

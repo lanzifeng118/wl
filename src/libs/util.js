@@ -2,7 +2,7 @@ let util = {
 
 };
 util.title = function(title) {
-    title = title ? title + ' - Home' : 'iView project';
+    title = title ? `${title} - DOAPI` : 'DOAPI';
     window.document.title = title;
 };
 
@@ -19,4 +19,15 @@ util.bytesToSize = function(bytes) {
 util.timeFormat = function(time) {
     
 }
+util.getCookie = function() {
+    let cookie = document.cookie.replace(/ /g, '')
+    let arr = cookie.split(';')
+    let obj = {}
+    arr.forEach((v, i) => {
+        let arrV = v.split('=')
+        obj[arrV[0]] = decodeURIComponent(arrV[1])
+    })
+    return obj
+}
+
 export default util;

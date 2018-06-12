@@ -2,11 +2,17 @@ const dashboardUrl = '/doapi-v2/dashboard'
 const appUrl = '/doapi-v2/appstore'
 const settingUrl = '/doapi-v2/appsetting'
 const taskUrl = '/doapi-v2/schedule'
+const signinUrl = '/doapi-v2/signin'
+const signoutUrl = '/doapi-v2/signout'
+const personalUrl = '/doapi-v2/personal'
 
-let queryFun = (url, method = 'query', pageData) => {
-  let data = { method }
+let queryFun = (url, method, pageData) => {
+  let data = {}
   if (pageData) {
     data.data = pageData
+  }
+  if (method) {
+    data.method = method
   }
   return {
     method: 'post',
@@ -79,6 +85,33 @@ let api = {
     },
     stopScheduel() {
       return queryFun(taskUrl, 'schedule.stop')
+    }
+  },
+  signin(data) {
+    return {
+      method: 'post',
+      url: signinUrl,
+      data
+    }
+  },
+  signout() {
+    return {
+      method: 'get',
+      url: signoutUrl
+    }
+  },
+  personal: {
+    changePasswd(data) {
+      return queryFun(personalUrl, 'user.passwd.change', data)
+    },
+    smsList(data) {
+      return queryFun(personalUrl, 'sms.list', data)
+    },
+    smsDelete(ids) {
+      return queryFun(personalUrl, 'sms.delete', { ids })
+    },
+    smsMark(ids) {
+      return queryFun(personalUrl, 'sms.mark', { ids })
     }
   }
 }
