@@ -1,20 +1,21 @@
 <template>
   <div class="login">
     <div class="login-box">
-      <h3 class="login-title">管理系统</h3>
+      <h3 class="login-title">D.O.API</h3>
+      <p class="login-co">鼎捷 API CMS</p>
       <Form ref="form" :model="form" :rules="ruleInline">
         <FormItem prop="user">
           <Input type="text" v-model="form.username" placeholder="用户名">
-          <Icon type="ios-person-outline" slot="prepend"></Icon>
+          <Icon type="android-contact" slot="prepend"></Icon>
           </Input>
         </FormItem>
         <FormItem prop="password">
           <Input type="password" v-model="form.password" placeholder="密码">
-          <Icon type="ios-locked-outline" slot="prepend"></Icon>
+          <Icon type="ios-locked" slot="prepend"></Icon>
           </Input>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSubmit('form')">登陆</Button>
+          <Button type="primary" long @click="handleSubmit('form')">登陆</Button>
         </FormItem>
       </Form>
     </div>
@@ -85,16 +86,39 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #292f3b;
+  background-color: #fff;
 }
 .login-box {
-  width: 350px;
+  width: 400px;
   margin: 200px auto;
-  padding: 20px;
+  padding: 40px;
+  border: 1px solid #f3f3f3;
   background: #fff;
 }
 .login-title {
   text-align: center;
+  font-size: 30px;
   margin-bottom: 15px;
 }
+.login-co {
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+/* .login .ivu-form-item {
+  position: relative;
+}
+.login .ivu-input-group-prepend {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: ;
+  background: none;
+  border: none;
+}
+.login .ivu-input {
+  height: 40px !important;
+  padding-left: 50px !important;
+  border: none;
+} */
 </style>
