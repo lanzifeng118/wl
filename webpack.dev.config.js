@@ -13,7 +13,7 @@ fs.open('./src/config/env.js', 'w', function (err, fd) {
 module.exports = merge(webpackBaseConfig, {
     devtool: '#source-map',
     output: {
-        publicPath: '/dist/',
+        publicPath: '/static/',
         filename: '[name].js',
         chunkFilename: '[name].chunk.js'
     },
@@ -27,13 +27,14 @@ module.exports = merge(webpackBaseConfig, {
             filename: 'vendors.js'
         }),
         new HtmlWebpackPlugin({
-            filename: '../index_dev.html',
+            filename: '../index.html',
             template: './src/template/index.ejs',
             inject: false
         })
     ],
     devServer: {
         port: '8090',
+        // openPage: 'index_dev.html',
         proxy: {
             '/doapi-v2': {
                 target: 'http://180.167.0.42:8067/doapi-v2/',
