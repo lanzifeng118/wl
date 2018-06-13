@@ -15,7 +15,7 @@
           </Input>
         </FormItem>
         <FormItem>
-          <Button type="primary" long @click="handleSubmit('form')">登陆</Button>
+          <Button type="primary" long @click="submit">登陆</Button>
         </FormItem>
       </Form>
     </div>
@@ -44,19 +44,24 @@ export default {
             message: '密码不能为空',
             trigger: 'blur'
           }
-          // {
-          //   type: 'string',
-          //   min: 3,
-          //   message: 'The password length cannot be less than 6 bits',
-          //   trigger: 'blur'
-          // }
         ]
       }
     }
   },
+  mounted() {
+    window.addEventListener('keyup', this.enterSubmit)
+  },
+  destroyed() {
+    window.removeEventListener('keyup', this.enterSubmit)
+  },
   methods: {
-    handleSubmit(name) {
-      this.$refs[name].validate(valid => {
+    enterSubmit(e) {
+      if (e.keyCode === 13) {
+        this.submit()
+      }
+    },
+    submit() {
+      this.$refs.form.validate(valid => {
         if (!valid) {
           return
         }
