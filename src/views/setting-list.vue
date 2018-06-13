@@ -89,6 +89,6 @@ export default {
 </script>
 <style>
 .config-list {
-  margin: 25px;
+  margin: 23px;
 }
 </style>

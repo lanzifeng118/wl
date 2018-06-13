@@ -248,7 +248,7 @@ export default {
 
 <style>
 .task {
-  margin: 25px;
+  margin: 23px;
 }
 .task-top {
   margin-bottom: 15px;

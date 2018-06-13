@@ -42,6 +42,6 @@ export default {
 </script>
 <style>
 .me {
-  padding: 0 25px 25px;
+  padding: 0 23px 23px;
 }
 </style>

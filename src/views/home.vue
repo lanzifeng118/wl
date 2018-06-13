@@ -195,6 +195,6 @@ export default {
 </script>
 <style>
 .home {
-  margin: 25px;
+  margin: 23px;
 }
 </style>

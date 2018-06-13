@@ -1,5 +1,11 @@
 <template>
   <div class="appstore-detail">
+    <!-- back -->
+    <div class="appstore-detail-back">
+      <Button type="text" size="small" icon="ios-arrow-back" @click="_back">返回</Button>
+      <!-- <span>返回列表页</span> -->
+      <!-- <Button type="error" size="small" shape="circle" icon="ios-arrow-back" @click="_back"></Button> 返回 -->
+    </div>
     <div class="appstore-detail-top f-clearfix">
       <div class="appstore-detail-logo"><img :src="data.logo"></div>
       <div class="appstore-detail-info">
@@ -71,13 +77,21 @@ export default {
         let data = res.data
         console.log(data)
         if (data.code === 200) {
-          data.data.logo = 'https://t.alipayobjects.com/images/T1HHFgXXVeXXXXXXXX.png'
           this.data = data.data
+        } else if (data.code === 101) {
+          this.$Message.error('应用不存在，返回列表页')
+          this._back()
+        } else {
+          this.$Message.error('查询有误，返回列表页')
+          this._back()
         }
       })
     },
     change() {
       this.getData()
+    },
+    _back() {
+      this.$router.push('/appstore')
     }
   },
   components: {
@@ -88,7 +102,8 @@ export default {
 
 <style>
 .appstore-detail {
-  padding: 25px;
+  position: relative;
+  margin: 23px;
 }
 .appstore-detail-logo {
   float: left;
@@ -115,12 +130,16 @@ export default {
 .appstore-detail-info p {
   margin-bottom: 8px;
 }
-
-.appstore-detail .ivu-table-wrapper {
-  /* border: none; */
+.appstore-detail-back {
+  position: absolute;
+  top: 60px;
+  right: 25px;
 }
-
-.appstore-detail .ivu-table th {
-  /* border-bottom: none; */
-}
+/* .appstore-detail-back span {
+  float: left;
+  margin-right: 5px;
+  line-height: 24px;
+  font-weight: bold;
+  color: #999;
+} */
 </style>
