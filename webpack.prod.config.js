@@ -12,7 +12,7 @@ fs.open('./src/config/env.js', 'w', function (err, fd) {
     fs.write(fd, buf, 0, buf.length, 0, function (err, written, buffer){});
 });
 
-let staticPath = path.resolve(__dirname, './dist/static')
+const staticPath = path.resolve(__dirname, './dist/static')
 
 module.exports = merge(webpackBaseConfig, {
     output: {
@@ -41,6 +41,7 @@ module.exports = merge(webpackBaseConfig, {
             }
         }),
         new HtmlWebpackPlugin({
+            // favicon: path.resolve(__dirname, 'static', 'images', 'logo.ico'),
             filename: '../index.html',
             template: './src/template/index.ejs',
             inject: false

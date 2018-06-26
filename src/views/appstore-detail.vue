@@ -132,7 +132,7 @@ export default {
 }
 .appstore-detail-back {
   position: absolute;
-  top: 60px;
+  top: 40px;
   right: 25px;
 }
 /* .appstore-detail-back span {
